@@ -2,7 +2,7 @@ from __future__ import absolute_import
 from recurrentshop import LSTMCell, RecurrentSequential
 from .cells import LSTMDecoderCell, AttentionDecoderCell
 from keras.models import Sequential, Model
-from keras.layers import Dense, Dropout, TimeDistributed, Bidirectional, Input
+from keras.layers import Dense, Dropout, TimeDistributed, Bidirectional, Input, Activation
 
 
 '''
@@ -177,6 +177,8 @@ def Seq2Seq(output_dim, output_length, batch_input_shape=None,
         decoder.add(Dropout(dropout, batch_input_shape=(shape[0], output_dim)))
         decoder.add(LSTMDecoderCell(output_dim=output_dim, hidden_dim=hidden_dim,
                                     batch_input_shape=(shape[0], output_dim)))
+    #========= NEW CHANGE ==========
+    decoder.add(Activation('softmax'))
 
     _input = Input(batch_shape=shape)
     _input._keras_history[0].supports_masking = True
